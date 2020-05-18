@@ -6,7 +6,7 @@ type Query{
 storyFull:String
      }
     type Mutation{
-    storyUpdate(type:storyInput):String
+    storyUpsert(type:storyInput):String
     }
     type Story{
    story:String,
@@ -14,7 +14,7 @@ storyFull:String
     },
     input storyInput{
     story:String,
-    edit:Int,
+    edit:Int!,
     add:String
     }
     `;
