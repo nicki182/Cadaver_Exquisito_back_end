@@ -1,0 +1,46 @@
+{
+  "name": "cadaver_exquisito_back-end_app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "bs": "yarn build && yarn start",
+    "start": "node  ./dist/server.js",
+    "clean": "rimraf ./dist",
+    "compile": "tsc",
+    "test": "mocha -—exit --timeout 10000 -r  ts-node/register  test/test.services.ts",
+    "coverege": "nyc yarn test",
+    "bt": "yarn build && yarn test",
+    "bc": "yarn build && yarn coverege"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "apollo-server": "^2.11.0",
+    "apollo-server-hapi": "^2.11.0",
+    "bcrypt-nodejs": "^0.0.3",
+    "chai": "^4.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "graphql": "^14.1.1",
+    "graphql-tools": "^4.0.7",
+    "hapi": "^18.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^7.1.1",
+    "moment": "^2.24.0",
+    "mongo-unit": "^2.0.1",
+    "mongoose": "^5.9.9",
+    "nyc": "^15.0.1",
+    "random": "^2.2.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.1",
+    "typescript": "^3.8.3"
+  },
+  "description": ""
+}
