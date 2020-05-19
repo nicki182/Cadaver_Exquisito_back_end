@@ -4,10 +4,14 @@ import {storyEditAdd,storyGetorCreate} from "../../utils/services";
 const mutations:IResolvers=
     {
         Mutation: {
-            storyUpsert: async (_, {type}) => {
-                const story = await storyGetorCreate(type.edit)
-                if(type.edit!=0) {await storyEditAdd(type.story, type.add)}
-                return story
+            storyUpdate: async (_, {type}) => {
+                try {
+                    await storyEditAdd(type.story, type.add)
+                    return true
+                }
+                catch (e) {
+                    return false
+                }
             }
         }
     }

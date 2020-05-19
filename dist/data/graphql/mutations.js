@@ -3,12 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const services_1 = require("../../utils/services");
 const mutations = {
     Mutation: {
-        storyUpsert: async (_, { type }) => {
-            const story = await services_1.storyGetorCreate(type.edit);
-            if (type.edit != 0) {
+        storyUpdate: async (_, { type }) => {
+            try {
                 await services_1.storyEditAdd(type.story, type.add);
+                return true;
             }
-            return story;
+            catch (e) {
+                return false;
+            }
         }
     }
 };

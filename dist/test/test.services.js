@@ -18,8 +18,7 @@ catch (e) {
 }
 describe('Testing app servises', () => {
     it('A story can be called and be written', async () => {
-        const story = await services_1.storyGetorCreate(0);
-        console.log();
+        const story = await services_1.storyGetorCreate(0, false);
         chai_1.expect(story.edit).to.equal(0);
     }),
         it('You can only see the first sentece or no more than 20 characters of the last edit', () => {
@@ -29,7 +28,7 @@ describe('Testing app servises', () => {
             console.log(sentence0);
         }),
         it('A story can be updated', async () => {
-            const story = await services_1.storyGetorCreate(0);
+            const story = await services_1.storyGetorCreate(0, false);
             const update = await services_1.storyEditAdd('jdskajk', story.story);
             chai_1.expect(update.edit).to.equal(1);
         });

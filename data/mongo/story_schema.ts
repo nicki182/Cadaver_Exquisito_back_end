@@ -6,7 +6,7 @@ const Storyschema = new Story_schema({
         required: true,
     },
     edit:{
-        type:Number,
+        type:[Number],
         required:true
     }
 })

@@ -3,9 +3,13 @@ import {storyGetorCreate} from "../../utils/services";
 
 const query:IResolvers=
     {
-        Query:{
+        Query: {
+            storyToAdd: async (_,{edit}) => {
+                const story = await storyGetorCreate(edit,false)
+                return story
+            },
             storyFull:async (_)=>{
-                const story=await storyGetorCreate(3)
+                const story=await storyGetorCreate(2,true)
                 return story
             }
         }
