@@ -3,7 +3,7 @@ const storySchema=require('../data/mongo/story_schema');
 async function  storyGetorCreate(edit:number,full:boolean) {
     let story
     if(full){
-         story = await storySchema.findOne({edit:[0,1,2,]}).exec()
+         story = await storySchema.findOne({edit:[0,1,2]}).exec()
     }
     else{
         story = await storySchema.findOne({edit: edit}).exec()
