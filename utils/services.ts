@@ -1,7 +1,13 @@
 
 const storySchema=require('../data/mongo/story_schema');
 async function  storyGetorCreate(edit:number,full:boolean) {
-    const story = await storySchema.findOne({edit: edit}).exec()
+    let story
+    if(full){
+         story = await storySchema.findOne({edit:[0,1,2,]}).exec()
+    }
+    else{
+        story = await storySchema.findOne({edit: edit}).exec()
+    }
         switch (true) {
             case (edit == 0 && story==null):
                 const new_story =new storySchema({
