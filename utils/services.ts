@@ -28,10 +28,6 @@ async function  storyGetorCreate(edit:number,full:boolean) {
             case(edit==2 && story==null && full):
                 return 'Sorry we currently dont have more stories'
             break;
-            case(edit==2 && full && story!=null):
-                const fullStory=[0,1,2].toString()==story.edit.sort().toString()? story.story:'Sorry we currently dont have more stories'
-                return fullStory
-            break
             default:
                 return story.story
             break
