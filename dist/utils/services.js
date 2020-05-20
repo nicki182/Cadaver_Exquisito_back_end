@@ -2,7 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const storySchema = require('../data/mongo/story_schema');
 async function storyGetorCreate(edit, full) {
-    const story = await storySchema.findOne({ edit: edit }).exec();
+    let story;
+    if (full) {
+        story = await storySchema.findOne({ edit: [0, 1, 2] }).exec();
+    }
+    else {
+        story = await storySchema.findOne({ edit: edit }).exec();
+    }
     switch (true) {
         case (edit == 0 && story == null):
             const new_story = new storySchema({
@@ -12,8 +18,7 @@ async function storyGetorCreate(edit, full) {
             await new_story.updateOne(new_story, { upsert: true, new: true });
             return new_story.story;
             break;
-        case (edit == 2 && story == null && full == false):
-            console.log(edit);
+        case (edit == 2 && story == null && !full):
             const story_to_continue = new storySchema({
                 story: '',
                 edit: [edit],
@@ -23,10 +28,6 @@ async function storyGetorCreate(edit, full) {
             break;
         case (edit == 2 && story == null && full):
             return 'Sorry we currently dont have more stories';
-            break;
-        case (edit == 2 && full && story != null):
-            const fullStory = [0, 1, 2].toString() == story.edit.sort().toString() ? story.story : 'Sorry we currently dont have more stories';
-            return fullStory;
             break;
         default:
             return story.story;
@@ -49,6 +50,6 @@ function storyCut(story) {
 }
 exports.storyCut = storyCut;
 async function storyEditAdd(add, story) {
-    return await storySchema.findOneAndUpdate({ story: story }, { story: story + add, $push: { $inc: { edit: 1 } } });
+    return await storySchema.findOneAndUpdate({ story: story }, { story: story + add, $push: { $inc: { edit: 1 } } }, { upsert: true, new: true });
 }
 exports.storyEditAdd = storyEditAdd;
