@@ -2,7 +2,7 @@ const mongoose=require('mongoose')
 const Story_schema=mongoose.Schema;
 const Storyschema = new Story_schema({
     story: {
-        type: String,
+        type: [String],
         required: true,
     },
     edit:{

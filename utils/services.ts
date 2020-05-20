@@ -7,7 +7,7 @@ async function  storyGetorCreate(edit:number) {
             case (edit == 0 && story==null):
                 const new_story =new storySchema({
                     story: 'This is my story...',
-                    edit: [0]
+                    edit:[3]
                 })
                 await new_story.updateOne(new_story,{upsert:true})
                 return new_story.story
@@ -17,33 +17,36 @@ async function  storyGetorCreate(edit:number) {
                     story: '',
                     edit: [edit],
                 })
-                await story_to_continue.updateOne(story_to_continue,{upsert:true})
                 return story_to_continue.story
             break;
             default:
-                return story.story
+                return story.story.pop()
             break
         }
 }
-async function storyGetFull(){
-    const story=await storyFullSchema.findOne().exec()
-    story==null?'sorry we currently dont have a full story':story.story
+async function storyGetFull(call:number){
+    const story=await storyFullSchema.findOne({id:call}).exec()
+    story==null?'sorry we currently don\'t have a full story':story.story
 }
 function storyCut(story:string){
   if(story.length<=50){
       return story
   }
-  if(story.length>50){
+  let sentences=[]
+  while(story.length>50){
       if(/['.']/.test(story)){
-          return story.substring(story.lastIndexOf('.'))
+          sentences.push((story.substring(story.lastIndexOf('.'))))
       }
       else{
-          return story.substring(story.length-50,story.length)
+          sentences.push(story.substring(story.length-50,story.length))
       }
   }
+  return sentences
 }
 async function storyEditAdd(add:string,story:string){
-        const update_story=await storySchema.findOneAndUpdate({story: story}, {story: story + add,$push:{$inc:{edit:1}}},{upsert:true,new:true})
+    const sentences=storyCut(add)
+        // @ts-ignore
+    const update_story=await storySchema.findOneAndUpdateMany({story: story}, {$push:{story:sentences},$push:{$dec:{edit:1}}},{new:true})
     if(update_story.edit.sort().toString()==[1,2,3].toString()){
         await storySchema.deleteOne({story: story})
         await storyFullSchema.updateOne(update_story,{upsert:true,new:true})

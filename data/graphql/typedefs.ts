@@ -2,7 +2,7 @@
 const {gql }=require('apollo-server-hapi')
 const typeDefs = gql`
 type Query{
-storyFull:String
+storyFull(call:Int):String
 storyToAdd(edit:Int):String
      }
     type Mutation{

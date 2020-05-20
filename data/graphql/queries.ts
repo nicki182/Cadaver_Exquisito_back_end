@@ -8,8 +8,8 @@ const query:IResolvers=
                 const story = await storyGetorCreate(edit)
                 return story
             },
-            storyFull:async (_)=>{
-                const story=await storyGetFull()
+            storyFull:async (_,{call})=>{
+                const story=await storyGetFull(call)
                 return story
             }
         }
