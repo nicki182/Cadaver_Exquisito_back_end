@@ -9,8 +9,7 @@ class Server {
             moongose.connect(uri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useCreateIndex:true,
-                useFindAndModify:false
+                useCreateIndex:true
             })
             const app = await new Hapi.server({
                 host: '192.168.0.23',

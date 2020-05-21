@@ -6,7 +6,7 @@ const mutations:IResolvers=
         Mutation: {
             storyUpdate: async (_, {type}) => {
                 try {
-                    await storyEditAdd(type.story, type.add)
+                    await storyEditAdd(type.story, type.add, type.edit)
                     return true
                 }
                 catch (e) {

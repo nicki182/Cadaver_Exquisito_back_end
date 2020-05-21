@@ -5,7 +5,7 @@ const mutations = {
     Mutation: {
         storyUpdate: async (_, { type }) => {
             try {
-                await services_1.storyEditAdd(type.story, type.add);
+                await services_1.storyEditAdd(type.story, type.add, type.edit);
                 return true;
             }
             catch (e) {

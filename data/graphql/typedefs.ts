@@ -14,7 +14,7 @@ storyToAdd(edit:Int):String
     },
     input storyInput{
     story:String,
-    edit:Int!,
+    edit:Int,
     add:String
     }
     `

@@ -4,11 +4,11 @@ const services_1 = require("../../utils/services");
 const query = {
     Query: {
         storyToAdd: async (_, { edit }) => {
-            const story = await services_1.storyGetorCreate(edit, false);
+            const story = await services_1.storyGetorCreate(edit);
             return story;
         },
-        storyFull: async (_) => {
-            const story = await services_1.storyGetorCreate(2, true);
+        storyFull: async (_, { call }) => {
+            const story = await services_1.storyGetFull(call);
             return story;
         }
     }
