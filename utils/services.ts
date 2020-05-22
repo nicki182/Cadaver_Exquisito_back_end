@@ -14,7 +14,8 @@ async function  storyGetorCreate(edit:number) {
                 return ''
             }
             else{
-                return storypart1.storyPart1.pop()
+                const sentence=storyCutLastSentence(storypart1.storyPart1)
+                return sentence
             }
             break
         case (edit==2):
@@ -24,26 +25,17 @@ async function  storyGetorCreate(edit:number) {
                 return ''
             }
             else{
-                return storypart2.storyPart2.pop()
+                const sentence=storyCutLastSentence(storypart2.storyPart2)
+                return sentence
             }
             break
     }
-}
-function storyAddSentences(sentences:[string]){
-    let story=''
-    while(sentences!=[]){
-        story=sentences.pop()+story
-    }
-    return story
 }
 async function storyGetFull(call:number){
      let storyParts=await storySchema.findOneAndDelete({storyPart0:{$exists:true},storyPart1:{$exists:true},storyPart2:{$exists:true}}).exec()
     if(storyParts!=null)
     {
-        let story
-       story=await storyAddSentences(storyParts.storyPart0)
-        story=story+await storyAddSentences(storyParts.storyPart1)
-        story=story+await storyAddSentences(storyParts.storyPart2)
+        const story=storyParts.storyPart0+storyParts.storyPart1+storyParts.storyPart2
         const storyFull = new storyFullSchema({
             story: story
         })
@@ -61,95 +53,111 @@ async function storyGetFull(call:number){
         }
     }
 }
-function storyCutInSentences(story:string){
-    let sentences=[]
-    console.log(story)
+function storyCutLastSentence(story:string){
+    let sentences
   if(story.length<=50){
-      const before= sentences.push(story)
-      console.log(before)
-      console.log(sentences)
-      return sentences
+      return story
   }
   else {
-      while (story.length > 50) {
           if (/['.']/.test(story) && story.length - story.lastIndexOf('.') < 50) {
-              sentences.push((story.substring(story.lastIndexOf('.'))))
+            sentences=story.substring(story.lastIndexOf('.'))
+              return sentences
           } else {
-              sentences.push(story.substring(story.length - 50, story.length))
+              sentences=story.substring(story.length - 50, story.length)
+              return sentences
           }
       }
-  }
-  return sentences
 }
 async function storyEditAdd(story:string,add:string,edit:number) {
-    const sentences = storyCutInSentences(add)
-    console.log(sentences)
     //Me fijo si en alguna historia le falta la parte que voy agregar y lo agrego, sino creo uno nuevo
-    if (story =='') {
+
+    if (story=='' || story=='This is my story...') {
         switch (true) {
             case (edit == 0):
-                const update_1_with_0 = await storySchema.findOne({storyPart1: {$exists: true}}).exec()
-                const update_2_with_0 = await storySchema.findOne({storyPart2: {$exists: true}}).exec()
+                const update_1_with_0 = await storySchema.findOne({
+                    storyPart1: {$exists: true},
+                    storyPart0: {$exists: false}
+                }).exec()
+                const update_2_with_0 = await storySchema.findOne({
+                    storyPart2: {$exists: true},
+                    storyPart0: {$exists: false}
+                }).exec()
                 switch (true) {
                     case(update_1_with_0 != null):
-                        await update_1_with_0.add({storyPart0: sentences})
+                        await update_1_with_0.add({storyPart0: add})
                         break
                     case (update_2_with_0 != null):
-                        await update_2_with_0.add({storyPart0: sentences})
+                        await update_2_with_0.add({storyPart0: add})
                         break
                     default:
                         const new_story = new storySchema({
-                            storyPart0: sentences
+                            storyPart0: add
                         })
                         await new_story.save()
                         break
                 }
+                break
             case (edit == 1):
-                const update_0_with_1 = await storySchema.findOne({storyPart0: {$exists: true},storyPart1: {$exists: false}}).exec()
-                const update_2_with_1 = await storySchema.findOne({storyPart2: {$exists: true},storyPart1: {$exists: false}}).exec()
-                switch (true) {
-                    case(update_0_with_1 != null):
-                        await update_0_with_1.add({storyPart1: sentences})
-                        break
-                    case (update_2_with_1 != null):
-                        await update_2_with_1.add({storyPart1: sentences})
-                        break
-                    default:
-                        const new_story = new storySchema({
-                            storyPart1: sentences
-                        })
-                        await new_story.save()
-                        break
-                }
-            case (edit == 2):
-                const update_0_with_2 = await storySchema.findOne({storyPart0: {$exists: true},storyPart2:{$exists: false}}).exec()
-                const update_1_with_2 = await storySchema.findOne({storyPart1: {$exists: true},storyPart2: {$exists: false}}).exec()
-                switch (true) {
-                    case(update_0_with_2 != null):
-                        await update_0_with_2.add({storyPart2: sentences})
-                        break
-                    case (update_1_with_2 != null):
-                        await update_1_with_2.add({storyPart2: sentences})
-                        break
-                    default:
-                        const new_story = new storySchema({
-                            storyPart2: sentences
-                        })
-                        await new_story.save()
-                        break
-                }
+            const update_0_with_1 = await storySchema.findOne({
+                storyPart0: {$exists: true},
+                storyPart1: {$exists: false}
+            }).exec()//Esta busqueda estoy dudando si es necesaria ya que cuando busco,me fijo si esta la parte 0
+            const update_2_with_1 = await storySchema.findOne({
+                storyPart2: {$exists: true},
+                storyPart1: {$exists: false}
+            }).exec()
+            switch (true) {
+                case(update_0_with_1 != null):
+                    await update_0_with_1.add({storyPart1: add})
+                    break
+                case (update_2_with_1 != null):
+                    await update_2_with_1.add({storyPart1: add})
+                    break
+                default:
+                    const new_story = new storySchema({
+                        storyPart1: add
+                    })
+                    await new_story.save()
+                    break
+            }
+            break
+            case(edit==2):
+            const update_0_with_2 = await storySchema.findOne({
+                storyPart0: {$exists: true},
+                storyPart2: {$exists: false}
+            }).exec()//Esta busqueda estoy dudando si es necesaria ya que cuando busco,me fijo si esta la parte 1
+            const update_1_with_2 = await storySchema.findOne({
+                storyPart1: {$exists: true},
+                storyPart2: {$exists: false}
+            }).exec()
+            switch (true) {
+                case(update_0_with_2 != null):
+                    await update_0_with_2.add({storyPart2: add})
+                    break
+                case (update_1_with_2 != null):
+                    await update_1_with_2.add({storyPart2: add})
+                    break
+                default:
+                    const new_story = new storySchema({
+                        storyPart2: add
+                    })
+                    await new_story.save()
+                    break
+            }
+            break
         }
+        //Agrego a la historia
     } else {
-        if(edit==1) {
-            const storypart0 = await storySchema.findOne({storyPart0: story}).exec()
-            await storypart0.add({storyPart1:sentences})
-        }
-        else{
-            const storypart1 = await storySchema.findOne({storyPart1: story}).exec()
-            await storypart1.add({storyPart2:sentences})
-        }
+            if (edit == 1) {
+                const storypart0 = await storySchema.findOne({storyPart0: story}).exec()
+                await storypart0.add({storyPart1: add})
+            }
+            else{
+                const storypart1 = await storySchema.findOne({storyPart1: story}).exec()
+                await storypart1.add({storyPart2: add})
         }
     }
+}
 export {
     storyEditAdd,
     storyGetorCreate,
