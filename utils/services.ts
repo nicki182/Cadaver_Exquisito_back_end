@@ -8,24 +8,22 @@ async function  storyGetorCreate(edit:number) {
                 return 'This is my story...'
             break
         case (edit==1):
-            const storypart1= await storySchema.findOne({storyPart1:{$exists:true}}).exec()
-            console.log(storypart1)
+            const storypart1= await storySchema.findOne({storyPart0:{$exists:true}}).exec()
             if (storypart1==null) {
                 return ''
             }
             else{
-                const sentence=storyCutLastSentence(storypart1.storyPart1)
+                const sentence=storyCutLastSentence(storypart1.storyPart0)
                 return sentence
             }
             break
         case (edit==2):
             const storypart2= await storySchema.findOne({storyPart2:{$exists:false},storyPart1:{$exists:true}}).exec()
-            console.log(storypart2)
             if (storypart2==null) {
                 return ''
             }
             else{
-                const sentence=storyCutLastSentence(storypart2.storyPart2)
+                const sentence=await storyCutLastSentence(storypart2.storyPart1)
                 return sentence
             }
             break
@@ -55,6 +53,7 @@ async function storyGetFull(call:number){
 }
 function storyCutLastSentence(story:string){
     let sentences
+    console.log(story)
   if(story.length<=50){
       return story
   }

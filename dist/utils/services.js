@@ -8,42 +8,32 @@ async function storyGetorCreate(edit) {
             return 'This is my story...';
             break;
         case (edit == 1):
-            const storypart1 = await storySchema.findOne({ storyPart1: { $exists: true } }).exec();
-            console.log(storypart1);
+            const storypart1 = await storySchema.findOne({ storyPart0: { $exists: true } }).exec();
             if (storypart1 == null) {
                 return '';
             }
             else {
-                return storypart1.storyPart1.pop();
+                const sentence = storyCutLastSentence(storypart1.storyPart0);
+                return sentence;
             }
             break;
         case (edit == 2):
             const storypart2 = await storySchema.findOne({ storyPart2: { $exists: false }, storyPart1: { $exists: true } }).exec();
-            console.log(storypart2);
             if (storypart2 == null) {
                 return '';
             }
             else {
-                return storypart2.storyPart2.pop();
+                const sentence = await storyCutLastSentence(storypart2.storyPart1);
+                return sentence;
             }
             break;
     }
 }
 exports.storyGetorCreate = storyGetorCreate;
-function storyAddSentences(sentences) {
-    let story = '';
-    while (sentences != []) {
-        story = sentences.pop() + story;
-    }
-    return story;
-}
 async function storyGetFull(call) {
     let storyParts = await storySchema.findOneAndDelete({ storyPart0: { $exists: true }, storyPart1: { $exists: true }, storyPart2: { $exists: true } }).exec();
     if (storyParts != null) {
-        let story;
-        story = await storyAddSentences(storyParts.storyPart0);
-        story = story + await storyAddSentences(storyParts.storyPart1);
-        story = story + await storyAddSentences(storyParts.storyPart2);
+        const story = storyParts.storyPart0 + storyParts.storyPart1 + storyParts.storyPart2;
         const storyFull = new storyFullSchema({
             story: story
         });
@@ -62,95 +52,110 @@ async function storyGetFull(call) {
     }
 }
 exports.storyGetFull = storyGetFull;
-function storyCutInSentences(story) {
-    let sentences = [];
+function storyCutLastSentence(story) {
+    let sentences;
     console.log(story);
     if (story.length <= 50) {
-        const before = sentences.push(story);
-        console.log(before);
-        console.log(sentences);
-        return sentences;
+        return story;
     }
     else {
-        while (story.length > 50) {
-            if (/['.']/.test(story) && story.length - story.lastIndexOf('.') < 50) {
-                sentences.push((story.substring(story.lastIndexOf('.'))));
-            }
-            else {
-                sentences.push(story.substring(story.length - 50, story.length));
-            }
+        if (/['.']/.test(story) && story.length - story.lastIndexOf('.') < 50) {
+            sentences = story.substring(story.lastIndexOf('.'));
+            return sentences;
+        }
+        else {
+            sentences = story.substring(story.length - 50, story.length);
+            return sentences;
         }
     }
-    console.log(sentences);
-    return sentences;
 }
 async function storyEditAdd(story, add, edit) {
-    const sentences = storyCutInSentences(add);
-    console.log(sentences);
     //Me fijo si en alguna historia le falta la parte que voy agregar y lo agrego, sino creo uno nuevo
-    if (story == '') {
+    if (story == '' || story == 'This is my story...') {
         switch (true) {
             case (edit == 0):
-                const update_1_with_0 = await storySchema.findOne({ storyPart1: { $exists: true } }).exec();
-                const update_2_with_0 = await storySchema.findOne({ storyPart2: { $exists: true } }).exec();
+                const update_1_with_0 = await storySchema.findOne({
+                    storyPart1: { $exists: true },
+                    storyPart0: { $exists: false }
+                }).exec();
+                const update_2_with_0 = await storySchema.findOne({
+                    storyPart2: { $exists: true },
+                    storyPart0: { $exists: false }
+                }).exec();
                 switch (true) {
                     case (update_1_with_0 != null):
-                        await update_1_with_0.add({ storyPart0: sentences });
+                        await update_1_with_0.add({ storyPart0: add });
                         break;
                     case (update_2_with_0 != null):
-                        await update_2_with_0.add({ storyPart0: sentences });
+                        await update_2_with_0.add({ storyPart0: add });
                         break;
                     default:
                         const new_story = new storySchema({
-                            storyPart0: sentences
+                            storyPart0: add
                         });
                         await new_story.save();
                         break;
                 }
+                break;
             case (edit == 1):
-                const update_0_with_1 = await storySchema.findOne({ storyPart0: { $exists: true }, storyPart1: { $exists: false } }).exec();
-                const update_2_with_1 = await storySchema.findOne({ storyPart2: { $exists: true }, storyPart1: { $exists: false } }).exec();
+                const update_0_with_1 = await storySchema.findOne({
+                    storyPart0: { $exists: true },
+                    storyPart1: { $exists: false }
+                }).exec(); //Esta busqueda estoy dudando si es necesaria ya que cuando busco,me fijo si esta la parte 0
+                const update_2_with_1 = await storySchema.findOne({
+                    storyPart2: { $exists: true },
+                    storyPart1: { $exists: false }
+                }).exec();
                 switch (true) {
                     case (update_0_with_1 != null):
-                        await update_0_with_1.add({ storyPart1: sentences });
+                        await update_0_with_1.add({ storyPart1: add });
                         break;
                     case (update_2_with_1 != null):
-                        await update_2_with_1.add({ storyPart1: sentences });
+                        await update_2_with_1.add({ storyPart1: add });
                         break;
                     default:
                         const new_story = new storySchema({
-                            storyPart1: sentences
+                            storyPart1: add
                         });
                         await new_story.save();
                         break;
                 }
+                break;
             case (edit == 2):
-                const update_0_with_2 = await storySchema.findOne({ storyPart0: { $exists: true }, storyPart2: { $exists: false } }).exec();
-                const update_1_with_2 = await storySchema.findOne({ storyPart1: { $exists: true }, storyPart2: { $exists: false } }).exec();
+                const update_0_with_2 = await storySchema.findOne({
+                    storyPart0: { $exists: true },
+                    storyPart2: { $exists: false }
+                }).exec(); //Esta busqueda estoy dudando si es necesaria ya que cuando busco,me fijo si esta la parte 1
+                const update_1_with_2 = await storySchema.findOne({
+                    storyPart1: { $exists: true },
+                    storyPart2: { $exists: false }
+                }).exec();
                 switch (true) {
                     case (update_0_with_2 != null):
-                        await update_0_with_2.add({ storyPart2: sentences });
+                        await update_0_with_2.add({ storyPart2: add });
                         break;
                     case (update_1_with_2 != null):
-                        await update_1_with_2.add({ storyPart2: sentences });
+                        await update_1_with_2.add({ storyPart2: add });
                         break;
                     default:
                         const new_story = new storySchema({
-                            storyPart2: sentences
+                            storyPart2: add
                         });
                         await new_story.save();
                         break;
                 }
+                break;
         }
+        //Agrego a la historia
     }
     else {
         if (edit == 1) {
             const storypart0 = await storySchema.findOne({ storyPart0: story }).exec();
-            await storypart0.add({ storyPart1: sentences });
+            await storypart0.add({ storyPart1: add });
         }
         else {
             const storypart1 = await storySchema.findOne({ storyPart1: story }).exec();
-            await storypart1.add({ storyPart2: sentences });
+            await storypart1.add({ storyPart2: add });
         }
     }
 }
