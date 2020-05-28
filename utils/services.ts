@@ -94,69 +94,53 @@ async function storyAddOrCreate(add:string,edit:number) {
             }
             break
         case (edit == 1):
-            const update_0_with_1 = await storySchema.findOne({
-                storyPart0: {$exists: true},
-                storyPart1: {$exists: false}
-            }).exec()//Esta busqueda estoy dudando si es necesaria ya que cuando busco,me fijo si esta la parte 0
             const update_2_with_1 = await storySchema.findOne({
                 storyPart2: {$exists: true},
                 storyPart1: {$exists: false}
             }).exec()
-            switch (true) {
-                case(update_0_with_1 != null):
-                    await update_0_with_1.add({storyPart1: add})
-                    break
-                case (update_2_with_1 != null):
+                if (update_2_with_1 != null) {
                     await update_2_with_1.add({storyPart1: add})
-                    break
-                default:
+                }
+                else{
                     const new_story = new storySchema({
                         storyPart1: add
                     })
                     await new_story.save()
-                    break
             }
             break
         case(edit == 2):
             const update_0_with_2 = await storySchema.findOne({
                 storyPart0: {$exists: true},
                 storyPart2: {$exists: false}
-            }).exec()//Esta busqueda estoy dudando si es necesaria ya que cuando busco,me fijo si esta la parte 1
-            const update_1_with_2 = await storySchema.findOne({
-                storyPart1: {$exists: true},
-                storyPart2: {$exists: false}
             }).exec()
-            switch (true) {
-                case(update_0_with_2 != null):
+                if(update_0_with_2 != null)
+                {
                     await update_0_with_2.add({storyPart2: add})
-                    break
-                case (update_1_with_2 != null):
-                    await update_1_with_2.add({storyPart2: add})
-                    break
-                default:
+                }
+                else{
                     const new_story = new storySchema({
                         storyPart2: add
                     })
                     await new_story.save()
-                    break
             }
             break
     }
 }
 
 async function storyEditAdd(story:string,add:string,edit:number) {
-    //Me fijo si en alguna historia le falta la parte que voy agregar y lo agrego, sino creo uno nuevo
-    if (story=='' || story=='This is my story...') {
-       await storyAddOrCreate(add,edit)
-        //Agrego a la historia que siguio le usuario
-    } else {
+    if(add!='') {//No puede pasar que se agregue nada a la historia
+        //Me fijo si en alguna historia le falta la parte que voy agregar y lo agrego, sino creo uno nuevo
+        if (story == '...' || story == 'This is my story...') {
+            await storyAddOrCreate(add, edit)
+            //Ya que antes no tenia una historia para agregar directamente busco donde lo puedo agregar y sino creo uno nuevo
+        } else {
             if (edit == 1) {
                 const storypart0 = await storySchema.findOne({storyPart0: story}).exec()
                 await storypart0.add({storyPart1: add})
-            }
-            else{
+            } else {
                 const storypart1 = await storySchema.findOne({storyPart1: story}).exec()
                 await storypart1.add({storyPart2: add})
+            }
         }
     }
 }
