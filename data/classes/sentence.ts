@@ -21,12 +21,5 @@ class sentence{
             }
         }
     }
-    sentencesToStory(sentences:string[]){
-        let story=''
-        while(sentences!=[]){
-            story=sentences.pop()+story
-        }
-        return story
-    }
 }
 export default sentence

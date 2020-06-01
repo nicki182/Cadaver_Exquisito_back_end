@@ -2,6 +2,9 @@ import Story from "./story";
 const storySchema=require('../mongo/storySchema')
 const storyFullSchema=require('../mongo/storyFullSchema')
 class StoryFull{
+    get(call: any) {
+        throw new Error("Method not implemented.");
+    }
 story:string
     getStoryFull(call:number){
     const storyInSentences=storySchema.findOne().$where('this.story.sentences.length==this.storyLength')

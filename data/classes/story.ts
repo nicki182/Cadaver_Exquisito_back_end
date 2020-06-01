@@ -2,7 +2,7 @@ const storySchema=require('../data/mongo/story_schema');
 const storyFullSchema=require('../data/mongo/story_full_schema')
 import Sentence from "./sentence";
 class Story {
-    //Me falta que busque el ultimo usuario son distintos
+    story:Sentence[]
     public async getLastSentence(lastPart:boolean,idUser:string) {
         if (lastPart) {
             const story = await storySchema.findOne({$expr:{$eql:[{$size:['$sentences']},'$storyLength'-1]}},{$not:{$elemMatch:{$eql:{sentences:{user:idUser}}}}}).exec()
