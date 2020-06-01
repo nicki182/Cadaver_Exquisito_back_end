@@ -5,13 +5,18 @@ class Story {
     //Me falta que busque el ultimo usuario son distintos
     public async getLastSentence(lastPart:boolean,idUser:string) {
         if (lastPart) {
-            const story = await storySchema.findOne().$where('this.story.sentences.length-1==this.storyLength').exec()
-            const senteces = new Sentence(story.sentences.pop().user, story.sentences.pop().text)
-            const lastSentence=senteces.cutLastSentence(senteces.text)
-            return lastSentence
+            const story = await storySchema.findOne({$expr:{$eql:[{$size:['$sentences']},'$storyLength'-1]}},{$not:{$elemMatch:{$eql:{sentences:{user:idUser}}}}}).exec()
+            if(story) {
+                const senteces = new Sentence(story.sentences.pop().user, story.sentences.pop().text)
+                const lastSentence = senteces.cutLastSentence(senteces.text)
+                return lastSentence
+            }
+        else{
+            return ''
+            }
         }
     else {
-            const story = await storySchema.findOne().$where('this.story.sentences.length!=this.storyLength').exec()
+            const story = await storySchema.findOne({$expr:{$and:{$not:{$eql:[{$size:['$sentences']},'$storyLength'-1]}}}},{$expr:{$not:{$eql:[{$size:['$sentences']},'$storyLength']}}}).exec()
             const senteces = new Sentence(story.sentences.pop().user, story.sentences.pop().text)
             const lastSentence=senteces.cutLastSentence(senteces.text)
             return lastSentence
