@@ -1,19 +1,21 @@
 'use strict'
-import Plugins from "./plugin";
+import Plugins from "./connections/plugin";
 const Hapi=require('hapi');
+require('dotenv').config();
 class Server {
     public static async init(): Promise<any> {
         try {
-            const uri = 'mongodb://127.0.0.1:27017/Cadaver_Exquisito';
+            const uri = process.env.MONGODB_URL;
             const moongose = require("mongoose");
             moongose.connect(uri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useCreateIndex:true
+                useCreateIndex:true,
+                useModifyAnd
             })
             const app = await new Hapi.server({
-                host: '192.168.0.23',
-                port:3030,
+                host: process.env.HOST,
+                port:process.env.PORT,
                 routes: {
                     cors:{
                         credentials: true

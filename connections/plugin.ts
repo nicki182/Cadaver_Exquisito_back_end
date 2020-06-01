@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 const {ApolloServer}=require('apollo-server-hapi');
-import typeDefs from "./data/graphql/typedefs";
-import resolvers from "./data/graphql/resolvers";
+import typeDefs from "../data/graphql/typedefs";
+import resolvers from "../data/graphql/resolvers";
 
 export default class Plugins {
 

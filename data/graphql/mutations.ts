@@ -1,12 +1,20 @@
 import {IResolvers} from "graphql-tools";
-import {storyEditAdd,storyGetorCreate} from "../../utils/services";
+import {create,update} from '../../utils/services';
 
-const mutations:IResolvers=
-    {
+const mutations:IResolvers= {
         Mutation: {
             storyUpdate: async (_, {type}) => {
                 try {
-                    await storyEditAdd(type.story, type.add, type.edit)
+                   await update(type.text, type.user)
+                    return true
+                }
+                catch (e) {
+                    return false
+                }
+            },
+            storyCreate:async (_, {type})=>{
+                try {
+                    await create(type.sentence, type.user,type.maxLength)
                     return true
                 }
                 catch (e) {

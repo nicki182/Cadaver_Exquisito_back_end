@@ -1,11 +1,12 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const plugin_1 = require("./plugin");
+const plugin_1 = require("./connections/plugin");
 const Hapi = require('hapi');
+require('dotenv').config();
 class Server {
     static async init() {
         try {
-            const uri = 'mongodb://127.0.0.1:27017/Cadaver_Exquisito';
+            const uri = process.env.MONGODB_URL;
             const moongose = require("mongoose");
             moongose.connect(uri, {
                 useNewUrlParser: true,
@@ -13,8 +14,8 @@ class Server {
                 useCreateIndex: true
             });
             const app = await new Hapi.server({
-                host: '192.168.0.23',
-                port: 3030,
+                host: process.env.HOST,
+                port: process.env.PORT,
                 routes: {
                     cors: {
                         credentials: true

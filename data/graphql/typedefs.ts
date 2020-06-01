@@ -3,19 +3,24 @@ const {gql }=require('apollo-server-hapi')
 const typeDefs = gql`
 type Query{
 storyFull(call:Int):String
-storyToAdd(edit:Int):String
+storyToAdd(text:string,user:string):String
      }
     type Mutation{
-    storyUpdate(type:storyInput):Boolean
+    storyUpdate(type:sentenceInput):Boolean
+    storyCreate(type:
     }
-    type Story{
-   story:String,
-    edit:Int
+    type Sentence{
+    sentence:String,
+    user:String
     },
+    input sentenceInput{
+    sentence:String,
+    user:String
+    }
     input storyInput{
-    story:String,
-    edit:Int,
-    add:String
+     sentence:String
+     user:String
+     maxLength:Number
     }
     `
 export default typeDefs;

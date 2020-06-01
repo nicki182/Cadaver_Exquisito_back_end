@@ -37,8 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var ApolloServer = require('apollo-server-hapi').ApolloServer;
-var typedefs_1 = require("./data/graphql/typedefs");
-var resolvers_1 = require("./data/graphql/resolvers");
+var typedefs_1 = require("../data/graphql/typedefs");
+var resolvers_1 = require("../data/graphql/resolvers");
 var Plugins = /** @class */ (function () {
     function Plugins() {
     }

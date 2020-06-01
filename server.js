@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var plugin_1 = require("./plugin");
+var plugin_1 = require("./connections/plugin");
 var Hapi = require('hapi');
 var Server = /** @class */ (function () {
     function Server() {

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const { ApolloServer } = require('apollo-server-hapi');
-const typedefs_1 = require("./data/graphql/typedefs");
-const resolvers_1 = require("./data/graphql/resolvers");
+const typedefs_1 = require("../data/graphql/typedefs");
+const resolvers_1 = require("../data/graphql/resolvers");
 class Plugins {
     static async graphql(app) {
         try {

@@ -1,14 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const services_1 = require("../../utils/services");
+const storyFull_1 = require("../classes/storyFull");
+const story_1 = require("../classes/story");
 const query = {
     Query: {
         storyToAdd: async (_, { edit }) => {
-            const story = await services_1.storyGetorCreate(edit);
-            return story;
+            const get = new story_1.default();
+            const got = await get.getLastSentence(edit);
+            return got;
         },
         storyFull: async (_, { call }) => {
-            const story = await services_1.storyGetFull(call);
+            const get = new storyFull_1.default();
+            const story = await get.get(call);
             return story;
         }
     }
