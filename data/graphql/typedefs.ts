@@ -15,7 +15,8 @@ storyToAdd(text:string,user:string):String
     },
     input sentenceInput{
     sentence:String,
-    user:String
+    userLast:String,
+    userNew:String
     }
     input storyInput{
      sentence:String

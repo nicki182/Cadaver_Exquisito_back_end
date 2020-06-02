@@ -11,6 +11,11 @@ const Storyschema = new StorySchema({
         type:Number,
         required: true
     },
+    full:{
+        type:Boolean,
+        required:true
+    }
 })
+mongoose.options.useFindAndModify=false
 module.exports = mongoose.model('story', Storyschema)
 export default Storyschema.methods;
