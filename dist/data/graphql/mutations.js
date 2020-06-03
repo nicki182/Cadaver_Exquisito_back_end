@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const story_1 = require("../classes/story");
+const services_1 = require("../../utils/services");
 const mutations = {
     Mutation: {
         storyUpdate: async (_, { type }) => {
             try {
-                const update = new story_1.default();
-                update.upsert(type.story, type.add, type.edit);
+                await services_1.update(type.sentence, type.storyId, type.user);
                 return true;
             }
             catch (e) {
+                console.log(e);
                 return false;
             }
         }

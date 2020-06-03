@@ -4,7 +4,7 @@ const storyFullSchema=require('../mongo/storyFullSchema')
 class StoryFull{
 story:string
     getStoryFull(call:number){
-    const storyInSentences=storySchema.findOne({full:true})
+    const storyInSentences=storySchema.findOneAndRemove({full:true})
         if(storyInSentences!=null){
             this.storyInSentencesToStoryFull(storyInSentences.sentences)
             return this.story

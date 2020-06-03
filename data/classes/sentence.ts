@@ -1,10 +1,8 @@
 import User from "./user";
 const storySchema=require('../mongo/storySchema')
 class sentence{
-    user:User
     text:string
-    constructor(user:string,text:string) {
-       this.user=new User(user)
+    constructor(text:string) {
         this.text=text
     }
     cutLastSentence(story: string) {

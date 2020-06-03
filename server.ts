@@ -5,13 +5,13 @@ require('dotenv').config();
 class Server {
     public static async init(): Promise<any> {
         try {
-            const uri = process.env.MONGODB_URL;
+            const uri = process.env.MONGODB_URL
             const moongose = require("mongoose");
             moongose.connect(uri, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useCreateIndex:true,
-                useModifyAnd
+                useFindAndModify:false
             })
             const app = await new Hapi.server({
                 host: process.env.HOST,

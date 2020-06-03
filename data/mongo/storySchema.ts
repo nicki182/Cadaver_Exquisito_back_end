@@ -4,7 +4,7 @@ const mongoose=require('mongoose')
 const StorySchema=mongoose.Schema;
 const Storyschema = new StorySchema({
     sentences:{
-        type:[{user:String,text:String}],
+        type:[String],
         required:true
     },
     storyLength:{
@@ -14,8 +14,15 @@ const Storyschema = new StorySchema({
     full:{
         type:Boolean,
         required:true
+    },
+    length:{
+        type:Number,
+        required:true
+    },
+    user:{
+        type:String,
+        required:true
     }
 })
-mongoose.options.useFindAndModify=false
 module.exports = mongoose.model('story', Storyschema)
 export default Storyschema.methods;
