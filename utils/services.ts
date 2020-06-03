@@ -1,13 +1,11 @@
-import Sentence from "../data/classes/sentence";
-
+import Story from "../data/classes/story";
 const storySchema=require('../data/mongo/storySchema')
 async function update(sentence: string, storyId:string,user:string) {
-    console.log(storyId)
 const story=await storySchema.findOneAndUpdate({id:storyId}).exec()
     story.sentences.push(sentence)
     story.length=story.length+1
     story.user=user
-    if(story.length==story.maxLength) {
+    if(story.length>=story.storyLength) {
         story.full = true
         await story.save()
         return true
@@ -16,12 +14,12 @@ const story=await storySchema.findOneAndUpdate({id:storyId}).exec()
     return true
 }
 async function getLastSentence(user:string) {
-    const story = await storySchema.findOne({expr:{$ne:{user:user}},full:false}).where('maxLength').equals('length').exec()
+    const story = await storySchema.findOne({expr: {$ne: {user: user}}, full: false}).exec()
+    const storyToWrite=new Story(story.sentences,story.id)
+    console.log(storyToWrite)
     if(story) {
-        const senteces = new Sentence(story.sentences.pop().text)
-        const lastSentence = senteces.cutLastSentence(senteces.text)
-        const toWrite={sentence:lastSentence,storyId:story.id}
-        return toWrite
+        const lastSentence=storyToWrite.getSentenceToWrite(storyToWrite)
+        return lastSentence
     }
     else{//Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
         const story = new storySchema({
@@ -32,8 +30,8 @@ async function getLastSentence(user:string) {
             user:'N/A'
         })
         await story.save()
-        const toWrite={sentence:'',storyId:story.id}
-        return toWrite
+        const storyToWrite=new Story(story.sentences,story.id)
+        return {sentence:storyToWrite.lastSentence,user:storyToWrite.storyId}
     }
 }
 export {

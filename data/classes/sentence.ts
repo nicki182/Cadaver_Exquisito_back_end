@@ -1,23 +1,23 @@
 import User from "./user";
 const storySchema=require('../mongo/storySchema')
-class sentence{
+class Sentence{
     text:string
     constructor(text:string) {
         this.text=text
     }
-    cutLastSentence(story: string) {
-        let sentences
-        if (story.length <= 50) {
-            return story
+    cutLastSentence(sentences:Sentence) {
+        let sentence
+        if (sentences.text.length <= 50) {
+            return sentences.text
         } else {
-            if (/['.']/.test(story) && story.length - story.lastIndexOf('.') < 50) {
-                sentences = story.substring(story.lastIndexOf('.'))
-                return sentences
+            if (/['.']/.test(sentences.text) && sentences.text.length - sentences.text.lastIndexOf('.') < 50) {
+                sentence = sentences.text.substring(sentences.text.lastIndexOf('.'))
+                return sentence
             } else {
-                sentences = story.substring(story.length - 50, story.length)
-                return sentences
+                sentence = sentences.text.substring(sentences.text.length - 50, sentences.text.length)
+                return sentence
             }
         }
     }
 }
-export default sentence
+export default Sentence

@@ -1,25 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const storySchema = require('../mongo/storySchema');
-class sentence {
+class Sentence {
     constructor(text) {
         this.text = text;
     }
-    cutLastSentence(story) {
-        let sentences;
-        if (story.length <= 50) {
-            return story;
+    cutLastSentence(sentences) {
+        let sentence;
+        if (sentences.text.length <= 50) {
+            return sentences.text;
         }
         else {
-            if (/['.']/.test(story) && story.length - story.lastIndexOf('.') < 50) {
-                sentences = story.substring(story.lastIndexOf('.'));
-                return sentences;
+            if (/['.']/.test(sentences.text) && sentences.text.length - sentences.text.lastIndexOf('.') < 50) {
+                sentence = sentences.text.substring(sentences.text.lastIndexOf('.'));
+                return sentence;
             }
             else {
-                sentences = story.substring(story.length - 50, story.length);
-                return sentences;
+                sentence = sentences.text.substring(sentences.text.length - 50, sentences.text.length);
+                return sentence;
             }
         }
     }
 }
-exports.default = sentence;
+exports.default = Sentence;
