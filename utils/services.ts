@@ -12,8 +12,9 @@ const story=await storySchema.findOneAndUpdate({id:storyId}).exec()
     return true
 }
 async function getLastSentence(user:string) {
-    const story=new Story()
-   story.getStory(user)
+    let story=new Story()
+   story=await story.getStory(user,story)
+    console.log(story)
     if(story) {
         const lastSentence=story.getSentenceToWrite(story)
         return lastSentence

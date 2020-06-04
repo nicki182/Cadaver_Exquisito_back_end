@@ -17,7 +17,7 @@ class StoryFull {
     storyInSentencesToStoryFull(storyInSentences) {
         let story = '';
         while (storyInSentences != []) {
-            story = storyInSentences.pop().text + story;
+            story = storyInSentences.pop() + story;
         }
         this.story = story;
     }

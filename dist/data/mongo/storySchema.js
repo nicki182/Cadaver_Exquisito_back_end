@@ -7,7 +7,7 @@ const Storyschema = new StorySchema({
         type: [String],
         required: true
     },
-    storyLength: {
+    storyMinLength: {
         type: Number,
         required: true
     },

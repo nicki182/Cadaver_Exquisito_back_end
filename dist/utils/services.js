@@ -7,34 +7,31 @@ async function update(sentence, storyId, user) {
     story.sentences.push(sentence);
     story.length = story.length + 1;
     story.user = user;
-    if (story.length >= story.storyLength) {
+    if (story.length >= story.storyMinLength) {
         story.full = true;
-        await story.save();
-        return true;
     }
     await story.save();
     return true;
 }
 exports.update = update;
 async function getLastSentence(user) {
-    const story = await storySchema.findOne({ expr: { $ne: { user: user } }, full: false }).exec();
-    const storyToWrite = new story_1.default(story.sentences, story.id);
-    console.log(storyToWrite);
+    let story = new story_1.default();
+    story = await story.getStory(user, story);
+    console.log(story);
     if (story) {
-        const lastSentence = storyToWrite.getSentenceToWrite(storyToWrite);
+        const lastSentence = story.getSentenceToWrite(story);
         return lastSentence;
     }
     else { //Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
         const story = new storySchema({
             sentences: [],
-            storyLength: 5,
+            storyMinLength: 5,
             length: 0,
             full: false,
             user: 'N/A'
         });
         await story.save();
-        const storyToWrite = new story_1.default(story.sentences, story.id);
-        return storyToWrite;
+        return { sentence: story.lastSentence, user: story.storyId };
     }
 }
 exports.getLastSentence = getLastSentence;
