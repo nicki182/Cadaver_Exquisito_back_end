@@ -4,10 +4,10 @@ const mongoose=require('mongoose')
 const StorySchema=mongoose.Schema;
 const Storyschema = new StorySchema({
     sentences:{
-        type:[String],
-        required:true
+            type:[String],
+            required: true
     },
-    storyLength:{
+    storyMinLength:{
         type:Number,
         required: true
     },

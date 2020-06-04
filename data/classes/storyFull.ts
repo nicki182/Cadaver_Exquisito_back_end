@@ -14,10 +14,10 @@ story:string
             return storyFull==null?'Sorry there are no more stories':storyFull.story
         }
     }
-    storyInSentencesToStoryFull(storyInSentences:[{user:string,text:string}]){
+    storyInSentencesToStoryFull(storyInSentences:[string]){
     let story=''
     while(storyInSentences!=[]){
-        story=storyInSentences.pop().text+story
+        story=storyInSentences.pop()+story
     }
     this.story=story
 }
