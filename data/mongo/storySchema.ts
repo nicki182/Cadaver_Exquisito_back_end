@@ -15,10 +15,6 @@ const Storyschema = new StorySchema({
         type:Boolean,
         required:true
     },
-    length:{
-        type:Number,
-        required:true
-    },
     user:{
         type:String,
         required:true

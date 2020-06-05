@@ -3,9 +3,8 @@ const storySchema=require('../data/mongo/storySchema')
 async function update(sentence: string, storyId:string,user:string) {
 const story=await storySchema.findOneAndUpdate({id:storyId}).exec()
     story.sentences.push(sentence)
-    story.length=story.length+1
     story.user=user
-    if(story.length>=story.storyMinLength) {
+    if(story.sentences.length>=story.storyMinLength) {
         story.full = true
     }
     await story.save()
@@ -21,9 +20,8 @@ async function getLastSentence(user:string) {
     }
     else{//Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
         const story = new storySchema({
-            sentences: [],
+            sentences: ['...'],//la frase inicializada que le podemos dar
             storyMinLength:5,
-            length:0,
             full:false,
             user:'N/A'
         })
