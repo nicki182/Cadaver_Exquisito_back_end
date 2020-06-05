@@ -4,17 +4,16 @@ class Story {
     story:Sentence[]
     lastSentence:Sentence
     storyId:string
-    public async getStory(user:string,story:Story){
-        const storyS = await storySchema.findOne({expr: {$ne: {user: user}}, full: false}).exec()
-        const text=storyS.sentences.pop()
-        const sentence=new Sentence(text)
-        story.lastSentence=sentence
-        story.storyId=storyS.id
-        return story
+    constructor(sentences:string[],storyId:string) {
+        while(sentences!=[]){
+            const sentence=new Sentence(sentences.pop())
+           this.story.push(sentence)
+        }
+        this.storyId=storyId
     }
     public getSentenceToWrite(story:Story) {
-        console.log(story)
-    const lastSentence =story.lastSentence.cutLastSentence(story.lastSentence)
+    const lastSentence =story.story.pop()
+        lastSentence.cutLastSentence(lastSentence)
         const storyId=story.storyId
     return {sentence:lastSentence,storyId:storyId}
 }

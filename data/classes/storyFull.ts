@@ -1,25 +1,19 @@
 import Story from "./story";
 const storySchema=require('../mongo/storySchema')
 const storyFullSchema=require('../mongo/storyFullSchema')
-class StoryFull{
-story:string
-    getStoryFull(call:number){
-    const storyInSentences=storySchema.findOneAndRemove({full:true})
-        if(storyInSentences!=null){
-            this.storyInSentencesToStoryFull(storyInSentences.sentences)
-            return this.story
-        }
-        else{
-            const storyFull=storyFullSchema.findOne({id:call})
-            return storyFull==null?'Sorry there are no more stories':storyFull.story
+class StoryFull {
+    story: string
+
+    constructor(storyInSentences?: [string], story?: string) {
+        if (storyInSentences) {
+            let story = ''
+            while (storyInSentences != []) {
+                story = storyInSentences.pop() + story
+            }
+            this.story = story
+        } else {
+            this.story = story
         }
     }
-    storyInSentencesToStoryFull(storyInSentences:[string]){
-    let story=''
-    while(storyInSentences!=[]){
-        story=storyInSentences.pop()+story
-    }
-    this.story=story
-}
 }
 export default StoryFull

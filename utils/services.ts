@@ -1,5 +1,7 @@
 import Story from "../data/classes/story";
+import StoryFull from "../data/classes/storyFull";
 const storySchema=require('../data/mongo/storySchema')
+const storyFullSchema=require('../data/mongo/storyFullSchema')
 async function update(sentence: string, storyId:string,user:string) {
 const story=await storySchema.findOneAndUpdate({id:storyId}).exec()
     story.sentences.push(sentence)
@@ -11,10 +13,9 @@ const story=await storySchema.findOneAndUpdate({id:storyId}).exec()
     return true
 }
 async function getLastSentence(user:string) {
-    let story=new Story()
-   story=await story.getStory(user,story)
-    console.log(story)
-    if(story) {
+    const storyQuery = await storySchema.findOne({expr: {$ne: {user: user}}, full: false}).exec()
+    if(storyQuery) {
+        const story=new Story(storyQuery.sentences,storyQuery.user)
         const lastSentence=story.getSentenceToWrite(story)
         return lastSentence
     }
@@ -26,7 +27,18 @@ async function getLastSentence(user:string) {
             user:'N/A'
         })
         await story.save()
-        return {sentence:story.lastSentence,user:story.storyId}
+        return {sentence:story.pop(),user:story.storyId}
+    }
+}
+async function getStoryFull(call:number){
+    const storyInSentences=storySchema.findOneAndRemove({full:true})
+    if(storyInSentences!=null){
+        const storyFull=new StoryFull(storyInSentences.sentences)
+        return storyFull
+    }
+    else{
+        const storyFull=storyFullSchema.findOne({id:call})
+        return storyFull.story==null?'Sorry there are no more stories':storyFull.story
     }
 }
 export {
