@@ -19,7 +19,7 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "apollo-server": "^2.11.0",
-    "apollo-server-hapi": "^2.11.0",
+    "apollo-server-hapi": "^2.14.2",
     "bcrypt-nodejs": "^0.0.3",
     "chai": "^4.2.0",
     "cors": "^2.8.5",
