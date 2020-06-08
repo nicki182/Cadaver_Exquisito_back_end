@@ -4,11 +4,8 @@ class Story {
     story:Sentence[]
     lastSentence:Sentence
     storyId:string
-    constructor(sentences:string[],storyId:string) {
-        while(sentences!=[]){
-            const sentence=new Sentence(sentences.pop())
-           this.story.push(sentence)
-        }
+    constructor(sentences:[string],storyId:string) {
+       sentences.map(sentences=>this.story.push(new Sentence(sentences)))
         this.storyId=storyId
     }
     public getSentenceToWrite(story:Story) {
