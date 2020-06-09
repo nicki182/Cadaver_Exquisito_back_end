@@ -3,19 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const storySchema = require('../mongo/storySchema');
 const sentence_1 = require("./sentence");
 class Story {
-    async getStory(user, story) {
-        const storyS = await storySchema.findOne({ expr: { $ne: { user: user } }, full: false }).exec();
-        const text = storyS.sentences.pop();
-        const sentence = new sentence_1.default(text);
-        story.lastSentence = sentence;
-        story.storyId = storyS.id;
-        return story;
+    constructor(sentences, storyId) {
+        if (sentences.length < 15) {
+            this.sentencesCount = sentences.length;
+            const lastSentence = new sentence_1.default(sentences.pop());
+            let sen = [lastSentence];
+            sentences.map((sentences) => {
+                const sentence = new sentence_1.default(sentences);
+                sen.push(sentence);
+            });
+            this.story = sen;
+            this.storyId = storyId;
+        }
     }
     getSentenceToWrite(story) {
-        console.log(story);
-        const lastSentence = story.lastSentence.cutLastSentence(story.lastSentence);
+        const lastSentence = story.story.pop();
+        lastSentence.cutLastSentence(lastSentence);
         const storyId = story.storyId;
-        return { sentence: lastSentence, storyId: storyId };
+        return { sentence: lastSentence.text, storyId: storyId };
     }
 }
 exports.default = Story;

@@ -5,7 +5,7 @@ const mutations:IResolvers= {
     Mutation: {
         storyUpdate: async (_, {type}) => {
             try {
-                await update(type.sentence, type.storyId, type.user)
+                await update(type.sentence, type.storyId, type.user,type.storyMaxLength)
                 return true
             } catch (e) {
                 console.log(e)

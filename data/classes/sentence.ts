@@ -12,10 +12,10 @@ class Sentence{
         } else {
             if (/['.']/.test(sentences.text) && sentences.text.length - sentences.text.lastIndexOf('.') < 50) {
                 sentence = sentences.text.substring(sentences.text.lastIndexOf('.'))
-                return sentence
+                this.text=sentence
             } else {
                 sentence = sentences.text.substring(sentences.text.length - 50, sentences.text.length)
-                return sentence
+                this.text=sentence
             }
         }
     }

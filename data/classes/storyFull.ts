@@ -7,9 +7,7 @@ class StoryFull {
     constructor(storyInSentences?: [string], story?: string) {
         if (storyInSentences) {
             let story = ''
-            while (storyInSentences != []) {
-                story = storyInSentences.pop() + story
-            }
+            storyInSentences.map(sentence=>story+sentence)
             this.story = story
         } else {
             this.story = story

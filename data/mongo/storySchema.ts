@@ -7,9 +7,8 @@ const Storyschema = new StorySchema({
             type:[String],
             required: true
     },
-    storyMinLength:{
-        type:Number,
-        required: true
+    storyMaxLength:{
+        type:Number
     },
     full:{
         type:Boolean,

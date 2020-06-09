@@ -2,17 +2,26 @@ const storySchema=require('../mongo/storySchema');
 import Sentence from "./sentence";
 class Story {
     story:Sentence[]
-    lastSentence:Sentence
     storyId:string
+    sentencesAmount:number
     constructor(sentences:[string],storyId:string) {
-       sentences.map(sentences=>this.story.push(new Sentence(sentences)))
-        this.storyId=storyId
+        if(sentences.length<15) {
+            this.sentencesAmount = sentences.length
+            const lastSentence=new Sentence(sentences.pop())
+            let sentencesList=[lastSentence]
+            sentences.map((sentences)=>{
+                const sentence=new Sentence(sentences)
+                sentencesList.push(sentence)})
+            this.story=sentencesList
+            this.storyId = storyId
+        }
     }
     public getSentenceToWrite(story:Story) {
     const lastSentence =story.story.pop()
         lastSentence.cutLastSentence(lastSentence)
         const storyId=story.storyId
-    return {sentence:lastSentence,storyId:storyId}
+        this.sentencesAmount--
+    return {sentence:lastSentence.text,storyId:storyId}
 }
 }
 export default Story

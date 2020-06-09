@@ -1,7 +1,7 @@
 import {IResolvers} from "graphql-tools";
 import StoryFull from "../classes/storyFull";
 import Story from "../classes/story";
-import {getLastSentence} from '../../utils/services'
+import {getLastSentence,getStoryFull} from '../../utils/services'
 const query:IResolvers=
     {
         Query: {
@@ -11,7 +11,7 @@ const query:IResolvers=
             },
             storyFull:async (_,{call})=>{
                 const storyFull =new StoryFull()
-                const story=await storyFull.getStoryFull(call)
+                const story=await getStoryFull(call)
                 return story
             }
         }

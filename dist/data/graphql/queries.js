@@ -10,7 +10,7 @@ const query = {
         },
         storyFull: async (_, { call }) => {
             const storyFull = new storyFull_1.default();
-            const story = await storyFull.getStoryFull(call);
+            const story = await services_1.getStoryFull(call);
             return story;
         }
     }
