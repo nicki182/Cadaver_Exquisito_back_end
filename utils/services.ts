@@ -19,7 +19,7 @@ async function getLastSentence(user:string) {
     const storyQuery = await storySchema.findOne( {user:{$ne:user}},{full: false}).exec()
     if(storyQuery) {
         const story=new Story(storyQuery.sentences,storyQuery.user)
-        const lastSentence=story.getSentenceToWrite(story)
+        const lastSentence=story.getSentenceToContinue(story)
         return lastSentence
     }
     else{//Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
@@ -29,7 +29,8 @@ async function getLastSentence(user:string) {
             user:'N/A'
         })
         await story.save()
-        return {sentence:story.sentences.pop(),storyId:story.storyId}
+        const lastSentence=story.sentences.pop()
+        return {sentence:lastSentence,storyId:story.storyId}
     }
 }
 async function getStoryFull(call:number){

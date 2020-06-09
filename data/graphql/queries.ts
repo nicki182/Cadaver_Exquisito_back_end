@@ -10,7 +10,6 @@ const query:IResolvers=
                 return lastSentence
             },
             storyFull:async (_,{call})=>{
-                const storyFull =new StoryFull()
                 const story=await getStoryFull(call)
                 return story
             }

@@ -16,7 +16,7 @@ class Story {
             this.storyId = storyId
         }
     }
-    public getSentenceToWrite(story:Story) {
+    public getSentenceToContinue(story:Story) {
     const lastSentence =story.story.pop()
         lastSentence.cutLastSentence(lastSentence)
         const storyId=story.storyId

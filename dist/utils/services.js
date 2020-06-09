@@ -19,12 +19,10 @@ async function update(sentence, storyId, user, storyMaxLength) {
 }
 exports.update = update;
 async function getLastSentence(user) {
-    console.log(user);
     const storyQuery = await storySchema.findOne({ user: { $ne: user } }, { full: false }).exec();
-    console.log(storyQuery.user);
     if (storyQuery) {
         const story = new story_1.default(storyQuery.sentences, storyQuery.user);
-        const lastSentence = story.getSentenceToWrite(story);
+        const lastSentence = story.getSentenceToContinue(story);
         return lastSentence;
     }
     else { //Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
@@ -34,7 +32,7 @@ async function getLastSentence(user) {
             user: 'N/A'
         });
         await story.save();
-        return { sentence: story.pop(), user: story.storyId };
+        return { sentence: story.sentences.pop(), storyId: story.storyId };
     }
 }
 exports.getLastSentence = getLastSentence;
