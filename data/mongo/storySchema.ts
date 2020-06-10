@@ -1,5 +1,3 @@
-import {GraphQLString} from "graphql";
-
 const mongoose=require('mongoose')
 const StorySchema=mongoose.Schema;
 const Storyschema = new StorySchema({
@@ -7,7 +5,7 @@ const Storyschema = new StorySchema({
             type:[String],
             required: true
     },
-    storyMaxLength:{
+    storyMax:{
         type:Number
     },
     full:{

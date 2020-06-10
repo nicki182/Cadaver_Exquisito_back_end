@@ -1,6 +1,6 @@
 'use strict'
 import Plugins from "./connections/plugin";
-const Hapi=require('hapi');
+import * as Hapi from 'hapi';
 require('dotenv').config();
 class Server {
     public static async init(): Promise<any> {

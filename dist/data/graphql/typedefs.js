@@ -1,7 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const { gql } = require('apollo-server-hapi');
-const typeDefs = gql `
+const apollo_server_hapi_1 = require("apollo-server-hapi");
+const typeDefs = apollo_server_hapi_1.gql `
 type Query{
 storyFull(call:Int):String
 storyToAdd(userId:String):Sentence

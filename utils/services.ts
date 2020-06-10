@@ -1,13 +1,13 @@
-import Story from "../data/classes/story";
-import StoryFull from "../data/classes/storyFull";
-const storySchema=require('../data/mongo/storySchema')
+import Story from "../data/classes/Story";
+import StoryFull from "../data/classes/StoryFull";
 const storyFullSchema=require('../data/mongo/storyFullSchema')
-async function update(sentence: string, storyId:string,user:string,storyMaxLength:number) {
+const storySchema=require('../data/mongo/storySchema')
+async function update(sentence: string, storyId:string,user:string,storyMax:number) {
     const story = await storySchema.findOneAndUpdate({id: storyId}).exec()
     story.sentences.push(sentence)
     story.user = user
-    if (story.storyMaxLength == null) {
-        await storySchema.add({storyMaxLength: storyMaxLength})
+    if (story.storyMax) {
+        await storySchema.add({storyMax: storyMax})
     }
     else if (story.sentences.length > story.storyMaxLength) {
         story.full = true
@@ -22,9 +22,9 @@ async function getLastSentence(user:string) {
         const lastSentence=story.getSentenceToContinue(story)
         return lastSentence
     }
-    else{//Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
+    else{
         const story = new storySchema({
-            sentences: ['This is my story...'],//la frase inicializada que le podemos dar
+            sentences: ['This is my story...'],
             full:false,
             user:'N/A'
         })

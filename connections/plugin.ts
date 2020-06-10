@@ -1,5 +1,5 @@
 import * as Hapi from 'hapi';
-const {ApolloServer}=require('apollo-server-hapi');
+import {ApolloServer} from 'apollo-server-hapi' ;
 import typeDefs from "../data/graphql/typedefs";
 import resolvers from "../data/graphql/resolvers";
 
@@ -10,10 +10,7 @@ export default class Plugins {
             const server = new ApolloServer({
                 typeDefs,
                 resolvers,
-                debug: true,
-                serverWillStart() {
-                    console.log('Server starting up!');
-                },
+                debug: true
             } as any);
 
             await server.applyMiddleware({app});

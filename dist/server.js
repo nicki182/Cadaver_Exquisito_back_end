@@ -1,7 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const plugin_1 = require("./connections/plugin");
-const Hapi = require('hapi');
+const Hapi = require("hapi");
 require('dotenv').config();
 class Server {
     static async init() {

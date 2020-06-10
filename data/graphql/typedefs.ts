@@ -1,5 +1,5 @@
 'use strict'
-const {gql }=require('apollo-server-hapi')
+import {gql } from 'apollo-server-hapi'
 const typeDefs = gql`
 type Query{
 storyFull(call:Int):String
@@ -16,7 +16,7 @@ storyToAdd(userId:String):Sentence
     sentence:String,
     user:String,
     storyId:String,
-    storyMaxLength:Int
+    storyMax:Int
     }
     `
 export default typeDefs;

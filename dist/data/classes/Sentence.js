@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const storySchema = require('../mongo/storySchema');
 class Sentence {
     constructor(text) {
         this.text = text;

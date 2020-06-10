@@ -1,4 +1,4 @@
-const mongoose=require('mongoose')
+import * as mongoose from 'mongoose'
 const StoryFull_schema=mongoose.Schema;
 const StoryFullschema = new StoryFull_schema({
     story: {

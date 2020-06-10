@@ -1,6 +1,4 @@
 import {IResolvers} from "graphql-tools";
-import StoryFull from "../classes/storyFull";
-import Story from "../classes/story";
 import {getLastSentence,getStoryFull} from '../../utils/services'
 const query:IResolvers=
     {

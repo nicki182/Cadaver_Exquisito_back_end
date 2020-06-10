@@ -1,5 +1,5 @@
 class User{
-    user:String
+    user:string
     constructor(user:string){
         this.user=user
     }

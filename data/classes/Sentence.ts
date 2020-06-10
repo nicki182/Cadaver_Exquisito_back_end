@@ -1,5 +1,3 @@
-import User from "./user";
-const storySchema=require('../mongo/storySchema')
 class Sentence{
     text:string
     constructor(text:string) {

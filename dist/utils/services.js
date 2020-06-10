@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const story_1 = require("../data/classes/story");
-const storyFull_1 = require("../data/classes/storyFull");
-const storySchema = require('../data/mongo/storySchema');
+const Story_1 = require("../data/classes/Story");
+const StoryFull_1 = require("../data/classes/StoryFull");
 const storyFullSchema = require('../data/mongo/storyFullSchema');
+const storySchema = require('../data/mongo/storySchema');
 async function update(sentence, storyId, user, storyMaxLength) {
     const story = await storySchema.findOneAndUpdate({ id: storyId }).exec();
     story.sentences.push(sentence);
     story.user = user;
-    if (story.storyMaxLength == null) {
+    if (story.storyMaxLength) {
         await storySchema.add({ storyMaxLength: storyMaxLength });
     }
     else if (story.sentences.length > story.storyMaxLength) {
@@ -20,26 +20,28 @@ async function update(sentence, storyId, user, storyMaxLength) {
 exports.update = update;
 async function getLastSentence(user) {
     const storyQuery = await storySchema.findOne({ user: { $ne: user } }, { full: false }).exec();
+    console.log(storyQuery);
     if (storyQuery) {
-        const story = new story_1.default(storyQuery.sentences, storyQuery.user);
+        const story = new Story_1.default(storyQuery.sentences, storyQuery.user);
         const lastSentence = story.getSentenceToContinue(story);
         return lastSentence;
     }
-    else { //Aca se podria agragar oraciones para enviar que sean elegidos de forma randomizada
+    else {
         const story = new storySchema({
             sentences: ['This is my story...'],
             full: false,
             user: 'N/A'
         });
         await story.save();
-        return { sentence: story.sentences.pop(), storyId: story.storyId };
+        const lastSentence = story.sentences.pop();
+        return { sentence: lastSentence, storyId: story.storyId };
     }
 }
 exports.getLastSentence = getLastSentence;
 async function getStoryFull(call) {
     const storyInSentences = storySchema.findOneAndRemove({ full: true });
     if (storyInSentences != null) {
-        const storyFull = new storyFull_1.default(storyInSentences.sentences);
+        const storyFull = new StoryFull_1.default(storyInSentences.sentences);
         return storyFull;
     }
     else {

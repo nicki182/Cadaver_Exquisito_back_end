@@ -12,7 +12,9 @@
     "test": "mocha -—exit --timeout 10000 -r  ts-node/register  test/test.services.ts",
     "coverege": "nyc yarn test",
     "bt": "yarn build && yarn test",
-    "bc": "yarn build && yarn coverege"
+    "bc": "yarn build && yarn coverege",
+     "syntaxCheck":"yarn tslint --project ./tsconfig.json"
+
   },
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
@@ -40,6 +42,8 @@
   },
   "devDependencies": {
     "@types/node": "^13.11.1",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"
   },
   "description": ""
