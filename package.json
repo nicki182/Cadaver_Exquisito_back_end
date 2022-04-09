@@ -31,7 +31,7 @@
     "hapi": "^18.1.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^7.1.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "mongo-unit": "^2.0.1",
     "mongoose": "^5.9.9",
     "nyc": "^15.0.1",
